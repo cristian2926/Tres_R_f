@@ -6,9 +6,14 @@ package pe.edu.upeu.app.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import pe.edu.upeu.app.dao.ResultadoDao;
+import pe.edu.upeu.app.dao.ResultadoDaoI;
+import pe.edu.upeu.app.modelo.ResultadoTO;
 
 /**
  *
@@ -16,13 +21,35 @@ import javax.swing.JOptionPane;
  */
 public class MainJuego extends javax.swing.JFrame {
 
+    ResultadoDaoI resul;
+    DefaultTableModel modelo;
     private JButton[][] MatrizButton;
 
     public MainJuego() {
         MatrizButton = new JButton[3][3];
         initComponents();
         AsignarButtons();
+        ListarDatosJuegos();
 
+    }
+
+    public void ListarDatosJuegos() {
+        resul = new ResultadoDao();
+        List<ResultadoTO> listarDatos = resul.ListarResultados();
+        jTable1.setAutoCreateRowSorter(true);
+        modelo = (DefaultTableModel) jTable1.getModel();
+        Object[] ob = new Object[4];
+        for (int i = 0; i < listarDatos.size(); i++) {
+            ob[0] = i + 1;
+            ob[1] = listarDatos.get(i).getNombre_partida();
+            ob[2] = listarDatos.get(i).getNombre_jugador1();
+            ob[3] = listarDatos.get(i).getNombre_jugador2();
+            ob[4] = listarDatos.get(i).getGanador();
+            ob[5] = listarDatos.get(i).getPunto();
+            ob[6] = listarDatos.get(i).getEstado();
+            modelo.addRow(ob);
+        }
+        jTable1.setModel(modelo);
     }
 
     @SuppressWarnings("unchecked")
@@ -30,6 +57,8 @@ public class MainJuego extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         boton2 = new javax.swing.JButton();
         boton4 = new javax.swing.JButton();
@@ -48,8 +77,8 @@ public class MainJuego extends javax.swing.JFrame {
         Anular = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        Player1 = new javax.swing.JTextField();
-        Player2 = new javax.swing.JTextField();
+        TxtPlayer1 = new javax.swing.JTextField();
+        TxtPlayer2 = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -61,15 +90,32 @@ public class MainJuego extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 0));
 
+        jLabel6.setFont(new java.awt.Font("Showcard Gothic", 2, 36)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel6.setText("EVALUACION  UNIDAD 2");
+
+        jLabel7.setFont(new java.awt.Font("Rockwell Condensed", 1, 24)); // NOI18N
+        jLabel7.setText("Cabana Sulca Cristian");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 83, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(24, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
@@ -156,16 +202,13 @@ public class MainJuego extends javax.swing.JFrame {
                     .addComponent(boton8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jPanel3.setBackground(new java.awt.Color(0, 0, 255));
+        jPanel3.setBackground(new java.awt.Color(102, 102, 255));
 
         jPanel5.setBackground(new java.awt.Color(0, 153, 51));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Nombre Partido", "Jugador 1", "Jugador 2", "Ganador", "Puntuacion", "Estado"
@@ -200,12 +243,13 @@ public class MainJuego extends javax.swing.JFrame {
             }
         });
 
+        Anular.setFont(new java.awt.Font("Showcard Gothic", 0, 18)); // NOI18N
         Anular.setText("ANULAR");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
         jLabel4.setText("JUGADOR 1:");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
         jLabel5.setText("JUGADOR 2:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -221,11 +265,11 @@ public class MainJuego extends javax.swing.JFrame {
                 .addGap(90, 90, 90)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Player1)
-                    .addComponent(Player2, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
+                    .addComponent(TxtPlayer1)
+                    .addComponent(TxtPlayer2, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -235,12 +279,12 @@ public class MainJuego extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Player1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TxtPlayer1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Anular, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Player2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TxtPlayer2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -253,10 +297,10 @@ public class MainJuego extends javax.swing.JFrame {
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel2.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 18)); // NOI18N
-        jLabel2.setText("JUGADOR 1");
+        jLabel2.setText("JUGADOR 1:");
 
         jLabel3.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 18)); // NOI18N
-        jLabel3.setText("JUGADOR 2");
+        jLabel3.setText("JUGADOR 2:");
 
         VictoriasJ1.setFont(new java.awt.Font("Rockwell Extra Bold", 0, 24)); // NOI18N
         VictoriasJ1.setText("0");
@@ -275,14 +319,14 @@ public class MainJuego extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(58, 58, 58)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(VictoriasJ1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(VictoriasJ2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(136, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -344,8 +388,8 @@ public class MainJuego extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Anular;
     private javax.swing.JButton BtnIniciar;
-    private javax.swing.JTextField Player1;
-    private javax.swing.JTextField Player2;
+    private javax.swing.JTextField TxtPlayer1;
+    private javax.swing.JTextField TxtPlayer2;
     private javax.swing.JLabel VictoriasJ1;
     private javax.swing.JLabel VictoriasJ2;
     private javax.swing.JButton boton1;
@@ -362,6 +406,8 @@ public class MainJuego extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -403,4 +449,29 @@ public class MainJuego extends javax.swing.JFrame {
         return Anular;
     }
 
+    public void Guadardatos() {
+
+        resul = new ResultadoDao();
+        ResultadoTO to = new ResultadoTO();
+        to.setNombre_jugador1(TxtPlayer1.getText());
+        to.setNombre_jugador2(TxtPlayer2.getText());
+
+        int fila = jTable1.getSelectedRow();
+        if (fila != -1) {
+            try {
+                int resultado = resul.crearResultado(to);
+                if (resultado != 0) {
+                    modelo = (DefaultTableModel) jTable1.getModel();
+                    Object nuevo[] = {fila + 1, to.getNombre_jugador1(), to.getNombre_jugador2()};
+                    modelo.removeRow(fila);
+                    modelo.insertRow(fila, nuevo);
+                    
+                    //JOptionPane.showMessageDialog(this, "Re registro");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }
+
+    }
 }

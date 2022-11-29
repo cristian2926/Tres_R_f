@@ -50,10 +50,15 @@ public class ResultadoDao implements ResultadoDaoI{
         int exec = 0;
         int i=0;
         String sql="insert into resultados(Nombre_jugador1, Nombre_jugador2)" + " values(?,?)";
+        //,Ganador, Punto, Estado
         try {
             ps = conexion.prepareCall(sql);
+            //ps.setString(++i, re.getNombre_partida());
             ps.setString(++i, re.getNombre_jugador1());
             ps.setString(++i, re.getNombre_jugador2());
+            //ps.setString(++i, re.getGanador());
+            //ps.setInt(++i, re.getPunto());
+            //ps.setString(++i, re.getEstado());
             exec = ps.executeUpdate();
         } catch (Exception e) {
         }

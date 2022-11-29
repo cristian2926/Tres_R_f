@@ -9,13 +9,17 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import pe.edu.upeu.app.dao.ResultadoDao;
+import pe.edu.upeu.app.dao.ResultadoDaoI;
+import pe.edu.upeu.app.gui.MainJuego;
+import pe.edu.upeu.app.gui.MainJuego.*;
 
-/**
- *
- * @author INTEL
- */
 public class ModeloJuego {
-
+    
+    MainJuego Gp;
+    ResultadoDaoI resul;
+    DefaultTableModel modelo;
     private String turno;
     private boolean end;
     private boolean empate;
@@ -35,9 +39,10 @@ public class ModeloJuego {
         cantJugadas = 0;
         victoriasJ1 = 0;
         victoriasJ2 = 0;
+        
     }
 
-    public void marcarBtn(int i, int j, JButton[][] MatrizButton,javax.swing.JButton bt) {
+    public void marcarBtn(int i, int j, JButton[][] MatrizButton, javax.swing.JButton bt) {
         if (!end) {
             if (tablero[i][j] == null) {
                 tablero[i][j] = turno;
@@ -48,11 +53,11 @@ public class ModeloJuego {
                     if (turno.equals("X")) {
                         turno = "O";
                         bt.setForeground(Color.red);
-                        bt.setFont(new Font("Ink Free",Font.BOLD,56));
+                        bt.setFont(new Font("Ink Free", Font.BOLD, 56));
                     } else {
                         turno = "X";
                         bt.setForeground(Color.blue);
-                        bt.setFont(new Font("Ink Free",Font.BOLD,56));
+                        bt.setFont(new Font("Ink Free", Font.BOLD, 56));
                     }
                 } else {
                     terminarJuego();
@@ -136,20 +141,26 @@ public class ModeloJuego {
     }
 
     private void terminarJuego() {
+
         if (empate) {
-            victoriasJ1=0;
-            victoriasJ2=0;
+            victoriasJ1 = 0;
+            victoriasJ2 = 0;
             JOptionPane.showMessageDialog(null, "Empate");
-            
+            Gp.Guadardatos();
         } else {
             if (turno.equals("X")) {
                 victoriasJ1++;
                 Xj1.setText(String.valueOf(victoriasJ1));
                 JOptionPane.showMessageDialog(null, "Victoria de jugador 1");
+               Gp.Guadardatos();
+                
+                //clasegu
             } else {
                 victoriasJ2++;
                 Oj2.setText(String.valueOf(victoriasJ2));
                 JOptionPane.showMessageDialog(null, "Victoria del jugador 2");
+                Gp.Guadardatos();
+                //clase
             }
         }
     }
@@ -166,12 +177,13 @@ public class ModeloJuego {
         cantJugadas = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                tablero[i][j]=null;
+                tablero[i][j] = null;
                 MatrizButton[i][j].setText("");
-                
+
             }
 
         }
     }
+    
 
 }
